@@ -1,9 +1,14 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+ 
 /**
  * @file session.h
  * @brief Freeswitch session wrapper module.
  * @author Christian Thierfeld
  * @version 1.0
  * @date 2019-11-21
+ * @copyright Copyright (c) 2019
  */
 
 #ifndef LIB_JVX_FS_FRAMEWORK_SYSTEM_SESSION_H
