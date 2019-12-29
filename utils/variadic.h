@@ -14,6 +14,21 @@
 #ifndef LIB_JVX_FS_FRAMEWORK_UTILS_VARIADIC_H
 #define LIB_JVX_FS_FRAMEWORK_UTILS_VARIADIC_H
 
+/**
+ * @addtogroup utils Utilities
+ * @{
+ * @defgroup variadic Variadic Macros
+ * @details Helper macros for variadic functions.
+ * @{
+ */
+
+/**
+ * @brief Counts the number of its arguments.
+ * @return Number of given arguments, between 1 and 128.
+ * @details Macro can only count from 1 up to 128.
+ * @warning If no argument is passed, 1 will be returned.
+ * If more than 128 arguments are passed, behavior will be undefined.
+ */
 #define JVXFS_MACRO_COUNT_PARAMS(...) \
     JVXFS_INTERN_MACRO_GET_128TH( \
         __VA_ARGS__, 127,126,125,124,123,122,121,120, \
@@ -30,6 +45,9 @@
         19,18,17,16,15,14,13,12,11,10, \
         9,8,7,6,5,4,3,2,1)
 
+/**
+ * @brief Returns the 128th argument.
+ */
 #define JVXFS_INTERN_MACRO_GET_128TH( \
     _1, _2, _3, _4, _5, _6, _7, _8, _9,_10, \
     _11,_12,_13,_14,_15,_16,_17,_18,_19,_20, \
@@ -44,5 +62,10 @@
     _101,_102,_103,_104,_105,_106,_107,_108,_109,_110, \
     _111,_112,_113,_114,_115,_116,_117,_118,_119,_120, \
     _121,_122,_123,_124,_125,_126,_127,x,...) x
+
+/**
+ * @}
+ * @}
+ */
          
 #endif

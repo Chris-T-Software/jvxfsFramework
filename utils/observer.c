@@ -18,11 +18,11 @@ typedef struct
     size_t size;
     size_t used;
     callback_t* observer;
-    jvxfs_observerable_t* observerable;
+    jvxfs_observable_t* observerable;
     switch_thread_rwlock_t* lock;
 } obs_t;
 
-jvxfs_status_t jvxfs_observer_create(jvxfs_observer_handle_t** obs, jvxfs_observerable_t* obj, jvxfs_error_t* err, switch_memory_pool_t* pool)
+jvxfs_status_t jvxfs_observer_create(jvxfs_observer_handle_t** obs, jvxfs_observable_t* obj, jvxfs_error_t* err, switch_memory_pool_t* pool)
 {
     *obs = NULL;
     obs_t* hdl = (obs_t*)switch_core_alloc(pool, sizeof(obs_t));
