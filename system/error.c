@@ -29,6 +29,7 @@ static const char* arrStates[] = {
     "No view selected for action",
     "Called function not available on this type of app",
     "App instance not found",
+    "App instance already exists",
     "Installation of FS media bug failed"
 };
 

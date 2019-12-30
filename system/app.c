@@ -10,6 +10,7 @@
 #include "error.h"
 #include "directives.h"
 #include "system.h"
+#include "view_private.h"
 #include "app.h"
 
 typedef struct list_drct
@@ -317,6 +318,34 @@ jvxfs_status_t jvxfs_app_call_directive(jvxfs_directive_data_t* data, jvxfs_view
         jvxfs_directive_func_session_t func = (jvxfs_directive_func_session_t)found->func; 
         return jvxfs_session_exec_directive(data, view, func, found->data);
     }
+}
+
+jvxfs_status_t jvxfs_app_exec_call(jvxfs_app_t* app, switch_core_session_t* session, const char* args)
+{
+    app_t* hdl = (app_t*)app;
+    jvxfs_error_t* err_hdl = jvxfs_module_get_error_handler(hdl->mod);
+    if (!session || !args) {
+        return jvxfs_error_set_error(err_hdl, JVXFS_STATUS_INVALID_ARGUMENT, JVXFS_LOG_ERROR, JVXFS_COMP_APP,
+            "Cannot execute call without session or arguments.");
+    }
+    char tmp[JVXFS_DIRECTIVE_NAME_MAX_LENGTH+1] = {0};
+    const char* directive = NULL;
+    const char* params = strchr(args, ' ');
+    if (!params) {
+        directive = args;
+        params = "";
+    } else {
+        size_t len = params - args;
+        if (len > JVXFS_DIRECTIVE_NAME_MAX_LENGTH) len = JVXFS_DIRECTIVE_NAME_MAX_LENGTH;
+        strncpy(tmp, args, len);
+        directive = tmp;
+        ++params;
+    }
+    jvxfs_directive_data_t data = { .app = app, .session = session, .directive = directive,
+        .parameters = params };
+    view_priv_t view = { .origin = JVXFS_VIEW_IN_CALL, .dest = JVXFS_VIEW_OUT_CONSOLE, .err = err_hdl, 
+        .data = &data, .console = NULL };
+    return jvxfs_app_call_directive(&data, &view);
 }
 
 jvxfs_status_t jvxfs_app_set_instance_factory(jvxfs_app_t* app, jvxfs_app_instance_factory_t func)

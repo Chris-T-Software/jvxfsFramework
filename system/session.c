@@ -8,29 +8,36 @@
 #include "module.h"
 #include "session.h"
 
-/**
- * TODO: fix if running app is called
- */
-jvxfs_status_t jvxfs_session_add_app_instance(switch_core_session_t* session, jvxfs_app_t* app, void* instance)
+
+jvxfs_status_t jvxfs_session_add_app_instance(switch_core_session_t* session, jvxfs_app_t* app,
+    jvxfs_app_instance_t* instance)
 {
     const char* name = jvxfs_app_get_name(app);
     jvxfs_error_t* err = jvxfs_module_get_error_handler(jvxfs_app_get_module(app));
     switch_channel_t* channel = switch_core_session_get_channel(session);
     void* tmp = switch_channel_get_private(channel, name);
     if (tmp) {
-        return jvxfs_error_set_error(err, JVXFS_STATUS_DUPLICATE_ENTRY, JVXFS_LOG_WARNING, JVXFS_COMP_SESSION,
-            "Existing app instance already running, stopped creating new one.");
+        return jvxfs_error_set_error(err, JVXFS_STATUS_APP_INSTANCE_EXISTING, JVXFS_LOG_WARNING, JVXFS_COMP_SESSION,
+            "Cannot overwrite existing app instance, stop creating new one.");
     }
     switch_channel_set_private(channel, name, instance);
     return JVXFS_STATUS_SUCCESS;    
 }
 
-jvxfs_app_instance_t* jvxfs_session_remove_app_instance(switch_core_session_t* session, const char* name)
+jvxfs_app_instance_t* jvxfs_session_remove_app_instance(switch_core_session_t* session, jvxfs_app_t* app)
 {
     switch_channel_t* channel = switch_core_session_get_channel(session);
+    const char* name = jvxfs_app_get_name(app);
     jvxfs_app_instance_t* tmp = switch_channel_get_private(channel, name);
     switch_channel_set_private(channel, name, NULL);
     return tmp;   
+}
+
+bool jvxfs_session_has_app_instance(switch_core_session_t* session, jvxfs_app_t* app)
+{
+    switch_channel_t* channel = switch_core_session_get_channel(session);
+    jvxfs_app_instance_t* tmp = switch_channel_get_private(channel, jvxfs_app_get_name(app));
+    return (tmp == NULL) ? false : true;
 }
 
 jvxfs_status_t jvxfs_session_exec_directive(jvxfs_directive_data_t* data, jvxfs_view_t* view,

@@ -53,6 +53,8 @@ jvxfs_status_t jvxfs_app_add_session_directive(jvxfs_app_t* app, const char* nam
 
 jvxfs_status_t jvxfs_app_call_directive(jvxfs_directive_data_t* data, jvxfs_view_t* view);
 
+jvxfs_status_t jvxfs_app_exec_call(jvxfs_app_t* app, switch_core_session_t* session, const char* args);
+
 jvxfs_status_t jvxfs_app_set_instance_factory(jvxfs_app_t* app, jvxfs_app_instance_factory_t func);
 jvxfs_status_t jvxfs_app_produce_instance(jvxfs_app_t* app, switch_core_session_t* session, const char* args);
 

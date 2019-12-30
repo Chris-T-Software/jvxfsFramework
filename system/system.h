@@ -8,7 +8,7 @@
  * @author Christian Thierfeld
  * @version 1.0
  * @date 2019-11-21
- * @details The user should not call these functions himself.
+ * @note The user should not call these functions himself.
  * @copyright Copyright (c) 2019
  */
 

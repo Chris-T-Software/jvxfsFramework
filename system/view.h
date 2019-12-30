@@ -23,7 +23,8 @@ typedef enum
 {
     JVXFS_VIEW_IN_CONSOLE,
     JVXFS_VIEW_IN_DTMF,
-    JVXFS_VIEW_IN_EVENT
+    JVXFS_VIEW_IN_EVENT,
+    JVXFS_VIEW_IN_CALL
 } jvxfs_view_input_t;
 
 typedef enum

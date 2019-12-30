@@ -8,6 +8,7 @@
 #include "system.h"
 #include "error.h"
 #include "view_private.h"
+#include "session.h"
 #include "module.h"
 
 typedef struct
@@ -86,7 +87,16 @@ void jvxfs_system_load_app(jvxfs_module_t* mod, switch_core_session_t* session, 
     }
     //switch_channel_t* channel = switch_core_session_get_channel(session);
     //const char* appName = switch_channel_get_variable(channel, SWITCH_CURRENT_APPLICATION_VARIABLE);
-    /*jvxfs_status_t res =*/ jvxfs_app_produce_instance(hdl->app, session, data);
+    if (jvxfs_session_has_app_instance(session, hdl->app)) {
+        if (zstr(data)) {
+            jvxfs_error_set_error(hdl->err, JVXFS_STATUS_APP_INSTANCE_EXISTING, JVXFS_LOG_ERROR, JVXFS_COMP_SYSTEM,
+                "Trying to overwrite existing app.");
+            return;
+        }
+        jvxfs_app_exec_call(hdl->app, session, data);
+    } else {
+        jvxfs_app_produce_instance(hdl->app, session, data);
+    }
 }
 
 switch_status_t jvxfs_system_exec_api(jvxfs_module_t* mod, _In_opt_z_ const char *cmd, 
